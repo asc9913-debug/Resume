@@ -681,7 +681,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:34px
   </div>
   <div class="contact-cta-wrap reveal">
     <button class="btn btn-primary" onclick="openContactModal()">✉ Send Me a Message</button>
-    <a href="https://www.linkedin.com/in/ashu0703" target="_blank" rel="noopener" class="btn btn-outline" onclick="openLinkedInInfo(event)">💼 Connect on LinkedIn</a>
+    <a href="https://www.linkedin.com/in/ashu0703" target="_blank" rel="noopener" class="btn btn-outline" onclick="openLinkedIn()">💼 Connect on LinkedIn</a>
   </div>
 </section>
 
@@ -733,6 +733,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:34px
     </div>
   </div>
 </div>
+-->
 <script>
 /* ── EmailJS ── */
 const EJS_SVC  = 'service_l2nhz3f';
@@ -824,6 +825,10 @@ function submitModal(e){
   e.preventDefault();
   sendEmail(document.getElementById('m_name').value.trim(),document.getElementById('m_email').value.trim(),document.getElementById('m_purpose').value,document.getElementById('m_message').value.trim(),document.getElementById('modalOk'),document.getElementById('modalBtn'));
 }
+
+function openLinkedIn() {
+    window.open('https://www.linkedin.com/in/ashu0703', '_blank');
+  }
 </script>
 </body>
 </html>
