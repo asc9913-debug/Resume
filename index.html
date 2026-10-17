@@ -234,6 +234,141 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:34px
   .proj-grid{grid-template-columns:1fr}
 }
 </style>
+
+<style id="visitor-choice-popup-styles">
+  body.visitor-choice-locked { overflow: hidden; }
+  #visitor-choice-overlay {
+    position: fixed; inset: 0; z-index: 999999; display: flex;
+    align-items: center; justify-content: center; padding: 24px; overflow-y: auto;
+    background:
+      radial-gradient(ellipse at 8% 18%, rgba(37,99,235,.26), transparent 34%),
+      radial-gradient(ellipse at 94% 78%, rgba(13,148,136,.20), transparent 31%),
+      linear-gradient(135deg, rgba(3,7,18,.97), rgba(12,20,34,.96) 55%, rgba(7,15,27,.98));
+    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  }
+  #visitor-choice-overlay[hidden] { display: none !important; }
+  #visitor-choice-overlay::before, #visitor-choice-overlay::after {
+    content: ""; position: fixed; pointer-events: none; border-radius: 50%;
+    border: 1px solid rgba(148,163,184,.10);
+  }
+  #visitor-choice-overlay::before { width: 560px; height: 560px; top: -260px; right: -140px; }
+  #visitor-choice-overlay::after { width: 420px; height: 420px; bottom: -250px; left: -120px; }
+  .visitor-choice-dialog {
+    position: relative; isolation: isolate; overflow: hidden;
+    width: min(100%, 860px); padding: clamp(28px, 5vw, 54px);
+    color: #f8fafc; border: 1px solid rgba(255,255,255,.15); border-radius: 30px;
+    background: linear-gradient(135deg, rgba(18,29,45,.97), rgba(9,17,29,.98));
+    box-shadow: 0 40px 130px rgba(0,0,0,.58), inset 0 1px 0 rgba(255,255,255,.07);
+    font-family: inherit;
+  }
+  .visitor-choice-dialog::before {
+    content: ""; position: absolute; z-index: -1; pointer-events: none;
+    width: 440px; height: 440px; top: -270px; right: -100px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,.25), rgba(20,184,166,.06) 58%, transparent 72%);
+  }
+  .visitor-choice-dialog::after {
+    content: ""; position: absolute; z-index: -1; pointer-events: none;
+    width: 300px; height: 300px; bottom: -240px; left: 18%;
+    border-radius: 50%; background: rgba(99,102,241,.15); filter: blur(28px);
+  }
+  .visitor-choice-header { max-width: 620px; margin: 0 auto 34px; text-align: center; }
+  .visitor-choice-topline {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    padding: 8px 13px; margin-bottom: 22px; border: 1px solid rgba(165,180,252,.22);
+    border-radius: 999px; color: #c7d2fe; background: rgba(99,102,241,.09);
+    font-size: .68rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .visitor-choice-status-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #5eead4;
+    box-shadow: 0 0 12px rgba(94,234,212,.65);
+  }
+  .visitor-choice-dialog h2 {
+    max-width: 600px; margin: 0 auto; color: #fff; text-align: center;
+    font-size: clamp(2.25rem, 6vw, 4rem); font-weight: 780;
+    letter-spacing: -.06em; line-height: 1.01;
+  }
+  .visitor-choice-dialog h2 em {
+    color: #a5b4fc; font-style: normal;
+    background: linear-gradient(90deg, #a5b4fc, #67e8f9);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .visitor-choice-intro {
+    max-width: 480px; margin: 18px auto 0; color: #aebccd;
+    text-align: center; line-height: 1.75; font-size: .98rem;
+  }
+  .visitor-choice-section-label {
+    display: flex; align-items: center; gap: 12px; margin: 0 0 14px;
+    color: #718198; font-size: .68rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .visitor-choice-section-label::after { content: ""; height: 1px; flex: 1; background: rgba(148,163,184,.17); }
+  .visitor-choice-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .visitor-choice-option {
+    position: relative; isolation: isolate; overflow: hidden;
+    display: flex; flex-direction: column; align-items: flex-start; width: 100%;
+    min-height: 255px; padding: 24px 24px 20px; text-align: left; color: #f8fafc;
+    border: 1px solid rgba(148,163,184,.22); border-radius: 22px;
+    background: linear-gradient(145deg, rgba(37,51,72,.88), rgba(18,29,44,.94));
+    cursor: pointer; font: inherit;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .visitor-choice-option::before {
+    content: ""; position: absolute; z-index: -1; width: 170px; height: 170px;
+    right: -90px; top: -100px; border-radius: 50%; background: rgba(129,140,248,.12);
+    transition: transform .3s ease;
+  }
+  .visitor-choice-option:hover::before { transform: scale(1.7); }
+  .visitor-choice-option:hover, .visitor-choice-option:focus-visible {
+    border-color: rgba(129,140,248,.85);
+    background: linear-gradient(145deg, rgba(43,62,89,.98), rgba(19,36,54,.98));
+    box-shadow: 0 22px 50px rgba(0,0,0,.28), 0 0 0 3px rgba(99,102,241,.09);
+    transform: translateY(-5px); outline: none;
+  }
+  .visitor-choice-icon-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 27px; }
+  .visitor-choice-icon {
+    display: grid; place-items: center; width: 56px; height: 56px; border-radius: 17px;
+    border: 1px solid rgba(165,180,252,.24);
+    background: linear-gradient(145deg, rgba(99,102,241,.25), rgba(20,184,166,.12));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06); font-size: 1.6rem;
+  }
+  .visitor-choice-number { color: #718198; font-size: .72rem; font-weight: 700; letter-spacing: .12em; }
+  .visitor-choice-copy { flex: 1; min-width: 0; }
+  .visitor-choice-copy strong { display: block; margin-bottom: 10px; color: #fff; font-size: 1.15rem; line-height: 1.35; letter-spacing: -.025em; }
+  .visitor-choice-copy span { display: block; color: #b9c5d5; font-size: .88rem; line-height: 1.7; }
+  .visitor-choice-card-footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    width: 100%; margin-top: 22px; padding-top: 16px;
+    border-top: 1px solid rgba(148,163,184,.14);
+    color: #c7d2fe; font-size: .77rem; font-weight: 650;
+  }
+  .visitor-choice-arrow {
+    display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px;
+    color: #e0e7ff; background: rgba(129,140,248,.13);
+    border: 1px solid rgba(165,180,252,.18); border-radius: 50%; font-size: 1.1rem;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .visitor-choice-option:hover .visitor-choice-arrow { transform: translateX(3px); background: rgba(129,140,248,.25); }
+  .visitor-choice-note { margin: 24px 0 0; text-align: center; color: #77869b; font-size: .75rem; }
+  @media (max-width: 600px) {
+    #visitor-choice-overlay { padding: 12px; align-items: flex-start; }
+    .visitor-choice-dialog { margin: auto 0; padding: 27px 17px 22px; border-radius: 24px; }
+    .visitor-choice-header { margin-bottom: 27px; }
+    .visitor-choice-topline { margin-bottom: 18px; font-size: .59rem; letter-spacing: .10em; }
+    .visitor-choice-dialog h2 { font-size: clamp(2.15rem, 10vw, 3rem); }
+    .visitor-choice-intro { margin-top: 13px; font-size: .88rem; }
+    .visitor-choice-options { grid-template-columns: 1fr; gap: 12px; }
+    .visitor-choice-option { min-height: auto; padding: 17px; border-radius: 18px; }
+    .visitor-choice-icon-row { margin-bottom: 15px; }
+    .visitor-choice-icon { width: 45px; height: 45px; border-radius: 14px; font-size: 1.3rem; }
+    .visitor-choice-copy strong { font-size: 1rem; margin-bottom: 5px; }
+    .visitor-choice-copy span { font-size: .81rem; line-height: 1.55; }
+    .visitor-choice-card-footer { margin-top: 15px; padding-top: 12px; }
+    .visitor-choice-note { margin-top: 17px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .visitor-choice-option, .visitor-choice-option::before, .visitor-choice-arrow { transition: none; }
+  }
+</style>
+
 </head>
 <body>
 <div id="cdot"></div>
@@ -1076,5 +1211,84 @@ function openLinkedIn() {
   }
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+
+<div id="visitor-choice-overlay" role="dialog" aria-modal="true" aria-labelledby="visitor-choice-title">
+  <section class="visitor-choice-dialog">
+    <header class="visitor-choice-header">
+      <div class="visitor-choice-topline"><span class="visitor-choice-status-dot"></span> Ashish Chaudhari&nbsp; · &nbsp;Finance &amp; Analytics</div>
+      <h2 id="visitor-choice-title">Let's find the right <em>way to work.</em></h2>
+      <p class="visitor-choice-intro">Whether you're building a team or looking for specialist support, choose the path that best describes what you need.</p>
+    </header>
+    <p class="visitor-choice-section-label">Choose your destination</p>
+    <div class="visitor-choice-options">
+      <button class="visitor-choice-option" type="button" id="visitor-choice-employment">
+        <span class="visitor-choice-icon-row">
+          <span class="visitor-choice-icon" aria-hidden="true">💼</span>
+          <span class="visitor-choice-number">01 / 02</span>
+        </span>
+        <span class="visitor-choice-copy">
+          <strong>I'm looking to hire you</strong>
+          <span>Explore my professional background, experience and fit for employment opportunities.</span>
+        </span>
+        <span class="visitor-choice-card-footer"><span>Employment &amp; recruitment</span><span class="visitor-choice-arrow" aria-hidden="true">→</span></span>
+      </button>
+      <button class="visitor-choice-option" type="button" id="visitor-choice-services">
+        <span class="visitor-choice-icon-row">
+          <span class="visitor-choice-icon" aria-hidden="true">✦</span>
+          <span class="visitor-choice-number">02 / 02</span>
+        </span>
+        <span class="visitor-choice-copy">
+          <strong>I need professional services</strong>
+          <span>Financial research, valuation, analytics, workflow automation, freelance projects and business collaborations.</span>
+        </span>
+        <span class="visitor-choice-card-footer"><span>Services &amp; collaborations</span><span class="visitor-choice-arrow" aria-hidden="true">→</span></span>
+      </button>
+    </div>
+    <p class="visitor-choice-note">Select one option to continue · You can explore the rest from there</p>
+  </section>
+</div>
+<script id="visitor-choice-popup-script">
+(function () {
+  const overlay = document.getElementById('visitor-choice-overlay');
+  if (!overlay) return;
+
+  const sessionKey = 'ashishPortfolioVisitorChoice';
+  const servicesUrl = 'https://ashish-finance.hatchable.site/?utm_source=chatgpt.com';
+
+  function closePopup() {
+    overlay.hidden = true;
+    document.body.classList.remove('visitor-choice-locked');
+  }
+
+  function showPopup() {
+    overlay.hidden = false;
+    document.body.classList.add('visitor-choice-locked');
+    const firstButton = document.getElementById('visitor-choice-employment');
+    if (firstButton) firstButton.focus({ preventScroll: true });
+  }
+
+  document.getElementById('visitor-choice-employment').addEventListener('click', function () {
+    try { sessionStorage.setItem(sessionKey, 'employment'); } catch (e) {}
+    closePopup();
+  });
+
+  document.getElementById('visitor-choice-services').addEventListener('click', function () {
+    try { sessionStorage.setItem(sessionKey, 'services'); } catch (e) {}
+    window.location.href = servicesUrl;
+  });
+
+  // No close button or outside-click dismissal: visitors must choose an option.
+  try {
+    if (sessionStorage.getItem(sessionKey)) {
+      overlay.hidden = true;
+    } else {
+      showPopup();
+    }
+  } catch (e) {
+    showPopup();
+  }
+})();
+</script>
+
 </body>
 </html>
